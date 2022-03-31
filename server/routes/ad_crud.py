@@ -1,28 +1,28 @@
 from fastapi import APIRouter, status, HTTPException
 from server.utils.database import SessionLocal
-from server.models.user import Payload
-from server.models.user import Item
+from server.models.ads import Payload
+from server.models.ads import Item
 
 router = APIRouter()
 db = SessionLocal()
 
 
 @router.get('/ads', status_code=200)
-def get_all_items():
+def get_all_ads():
     items = db.query(Item).all()
 
     return {"data": items, "status": 200, "message": "Ads get successfully"}
 
 
 @router.get('/ads/{item_id}', status_code=status.HTTP_200_OK)
-def get_an_items(item_id: int):
+def get_an_ad(item_id: int):
     item = db.query(Item).filter(Item.id == item_id).first()
 
     return {"data": item, "status": 200, "message": "Ads retrive successfully"}
 
 
 @router.post('/ads', status_code=status.HTTP_201_CREATED)
-def create_item(payload: Payload):
+def create_ad(payload: Payload):
 
     db_item = db.query(Item).filter(Item.id == payload.id).first()
 
@@ -44,7 +44,7 @@ def create_item(payload: Payload):
 
 
 @router.put('/ads/{item_id}', status_code=status.HTTP_200_OK)
-def update_an_item(item_id: int, item: Payload):
+def update_an_ad(item_id: int, item: Payload):
 
     item_to_update = db.query(Item).filter(Item.id == item_id).first()
     item_to_update.id = item.id
@@ -59,7 +59,7 @@ def update_an_item(item_id: int, item: Payload):
 
 
 @router.delete('/ads/{item_id}')
-def delete_item(item_id: int):
+def delete_ad(item_id: int):
     item_to_delete = db.query(Item).filter(Item.id == item_id).first()
 
     if item_to_delete is None:
